@@ -6,10 +6,21 @@ class SessionsController < ApplicationController
   def create
     return redirect_to start_path if Current.user
 
-    user = User.create!
+    tenant_name = nil
+    device_token = nil 
+
+    # ApplicationRecord.with_tenant('default') do
+      user = User.create!
+      device_token = user.device_token
+      tenant_name = user.id.to_s
+    # end
+
+    ApplicationRecord.create_tenant(tenant_name)
+
+    # TenantProvisioner.create(tenant_name)
 
     cookies.permanent.encrypted[:device_token] = {
-      value: user.device_token,
+      value: device_token,
       httponly: true,
       secure: Rails.env.production?,
       same_site: :lax
@@ -18,6 +29,8 @@ class SessionsController < ApplicationController
     Current.user = user
 
     redirect_to root_path
+
+    # redirect_to user_todos_path(Current.user)
   end
 
   def destroy

@@ -1,37 +1,11 @@
-default: &default
-  adapter: sqlite3
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-
 development:
-  shared:
-    <<: *default
-    database: storage/development/shared.sqlite3
-    schema_dump: false
   primary:
-    <<: *default
+    adapter: sqlite3
+    database: storage/development/primary.sqlite3
+    schema_dump: false
+  mytenant:
+    adapter: sqlite3
     tenanted: true
     database: storage/development/%{tenant}.sqlite3
     schema_dump: false
 
-test:
-  shared:
-    <<: *default
-    database: storage/test/shared.sqlite3
-    schema_dump: false
-  primary:
-    <<: *default
-    tenanted: true
-    database: storage/test/%{tenant}.sqlite3
-    schema_dump: false
-
-production:
-  shared:
-    <<: *default
-    database: storage/production/shared.sqlite3
-    schema_dump: false
-  primary:
-    <<: *default
-    tenanted: true
-    database: storage/production/%{tenant}.sqlite3
-    schema_dump: false

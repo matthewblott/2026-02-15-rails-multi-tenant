@@ -10,11 +10,11 @@ class User < SharedApplicationRecord
   end
 
   def provision_tenant
-    TenantProvisioner.create(tenant_name)
+    # TenantProvisioner.create(tenant_name)
   end
   
   def tenant_name
-    "user_#{id}"
+    "#{id}"
   end
 
 end

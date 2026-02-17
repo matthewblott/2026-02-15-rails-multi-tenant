@@ -18,7 +18,7 @@ require "action_view/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-ENV['ARTENANT'] ||= 'default' if Rails.env.development?
+ENV['ARTENANT'] ||= 'primary' if Rails.env.development?
 
 module Todos
   class Application < Rails::Application
@@ -42,11 +42,31 @@ module Todos
     config.generators.system_tests = nil
     
     # Active Record Tenanted
-    config.active_record_tenanted.connection_class = "ApplicationRecord"
-    config.active_record_tenanted.tenant_resolver = ->(request) {
-      first_segment = request.path.split("/").reject(&:empty?).first
-      Integer(first_segment, 10) rescue nil
-    }
+    
+    # config.active_record_tenanted.connection_class = "ApplicationRecord"
+    # config.active_record_tenanted.tenant_resolver = ->(request) {
+    #   first_segment = request.path.split("/").reject(&:empty?).first
+    #   Integer(first_segment, 10) rescue nil
+    # }
+
+    # config.active_record_tenanted.tenant_resolver = ->(request) {
+    #   first_segment = request.path.split("/").reject(&:empty?).first
+    #   if first_segment&.match?(/\A\d+\z/)
+    #     first_segment
+    #   else
+    #     "primary"
+    #   end
+    # }
+
+    # config.active_record_tenanted.tenant_resolver = ->(request) {
+    #   first_segment = request.path.split("/").reject(&:empty?).first
+    #   first_segment if first_segment&.match?(/\A\d+\z/)
+    # }
+
+    # if config.active_record_tenanted.connection_class.present?
+    #   config.middleware.use ActiveRecord::Tenanted::TenantSelector
+    # end
 
   end
 end
+
