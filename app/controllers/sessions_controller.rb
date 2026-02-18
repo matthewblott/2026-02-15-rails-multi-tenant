@@ -6,16 +6,16 @@ class SessionsController < ApplicationController
   def create
     return redirect_to start_path if Current.user
 
-    tenant_name = nil
-    device_token = nil 
+    # tenant_name = nil
+    # device_token = nil 
 
     # ApplicationRecord.with_tenant('default') do
       user = User.create!
       device_token = user.device_token
-      tenant_name = user.id.to_s
+      # tenant_name = user.id.to_s
     # end
 
-    ApplicationRecord.create_tenant(tenant_name)
+    # ApplicationRecord.create_tenant(tenant_name)
 
     # TenantProvisioner.create(tenant_name)
 

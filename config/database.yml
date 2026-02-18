@@ -1,11 +1,8 @@
 development:
-  primary:
+  global:
     adapter: sqlite3
     database: storage/development/primary.sqlite3
-    schema_dump: false
-  mytenant:
+  primary:
     adapter: sqlite3
     tenanted: true
     database: storage/development/%{tenant}.sqlite3
-    schema_dump: false
-
